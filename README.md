@@ -7,9 +7,10 @@ With this python script you can constantly monitor your playlist and keep track 
 
 Steps:
 * Create an Youtube-Api key: [Python YouTube API Tutorial, Schafer](https://www.youtube.com/watch?v=th5_9woFJmk)
-* Save the key as env variable [Environment Variables, Schafer](https://www.youtube.com/watch?v=5iWhQWVXosU)
+* Save the key as env variable: [Environment Variables, Schafer](https://www.youtube.com/watch?v=5iWhQWVXosU)
 * Find your music playlist_id
 * Run the script:
+* 
   ```sh
   python youtube_playlist.py
   ```

@@ -78,7 +78,7 @@ if songs_removed:
     with open("Video_Titles_Removed.txt", "a+", encoding="utf-8") as text_file:
         text_file.write( f"Songs Removed on: {current_time} " + "\n\n")
         for song in songs_removed:
-            text_file.write(str(song))
+            text_file.write(str(song) + "\n")
         text_file.write( "#-----------------------------------------------#\n\n")
 
 if songs_added:

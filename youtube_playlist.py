@@ -61,6 +61,30 @@ while True:           #Loop through multiple pages of 50-values
     if not nextPageToken:
         break
 #---------------------------------------------------------------------------#
+```Test if files exist. If not create them.```
+
+if os.path.isfile('Video_Titles.txt'):
+    print ("Video_Titles.txt file exists.")
+else:
+    print ("Video_Titles.txt file does not exist!...creating the file")
+    with open('Video_Titles.txt', 'w') as f:
+        pass
+
+if os.path.isfile('Video_Titles_Added.txt'):
+    print ("Video_Titles_Added.txt file exists.")
+else:
+    print ("Video_Titles_Added file does not exist!...creating the file")
+    with open('Video_Titles_Added.txt', 'w') as f:
+        pass
+
+if os.path.isfile('Video_Titles_Removed.txt'):
+    print ("Video_Titles_Removed.txt file exists.")
+else:
+    print ("Video_Titles_Removed.txt file does not exist!...creating the file")
+    with open('Video_Titles_Removed.txt', 'w') as f:
+        pass
+#---------------------------------------------------------------------------#
+
 with open('Video_Titles.txt', encoding='utf8') as file:
     saved_list   = file.read().splitlines()                   #Current local-save list of video titles
     current_list = [ song for song in video_title_list ]      #Current youtube-bases list of video titles

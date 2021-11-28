@@ -110,15 +110,15 @@ songs_removed     = [ saved_video_dict_list.get(song, "Error") for song in songs
 if songs_added:
     with open("Video_Titles_Added.txt", "a+", encoding="utf-8") as text_file:
         text_file.write( f"Songs Added on: {current_time} " + "\n\n")
-        for song in songs_added:
-            text_file.write(str(song) + "\n")
+        for index, song in enumerate(songs_added, 1):
+            text_file.write(str(index) + ": " + str(song) + "\n")
         text_file.write( "#-----------------------------------------------#\n\n")
 
 if songs_removed:
     with open("Video_Titles_Removed.txt", "a+", encoding="utf-8") as text_file:
         text_file.write( f"Songs Removed on: {current_time} " + "\n\n")
-        for song in songs_removed:
-            text_file.write(str(song) + "\n")
+        for index, song in enumerate(songs_removed, 1):
+            text_file.write(str(index) + ": " + str(song) + "\n")
         text_file.write( "#-----------------------------------------------#\n\n")
 
 #---------------------------------------------------------------------------#
@@ -128,7 +128,7 @@ with open('Video_Playlist_Data.p', 'wb') as file:
 
 with open("Video_Titles.txt", "w", encoding="utf-8") as text_file:
     text_file.write( f"Playlist last checked on: {current_time} " + "\n\n")
-    for index, song in enumerate(list(yt_video_dict_list.values())):
+    for index, song in enumerate(list(yt_video_dict_list.values()), 1):
          text_file.write(str(index) + ": " + str(song) + "\n")   
 
 # if __name__ == "__main__":

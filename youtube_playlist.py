@@ -23,7 +23,8 @@ youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
 #     print( item['snippet']['title'] )
 #------------------------------------------------------------------------#
-
+current_time     = datetime.datetime.now()
+video_ID_list    = [ ]
 video_title_list = [ ]   #List that holds all the titles of the videos of a playlist
 nextPageToken    = None
 
@@ -42,6 +43,7 @@ while True:           #Loop through multiple pages of 50-values
 
     for item in pl_response['items']:
         vid_ids.append ( item["contentDetails"]["videoId"] )
+        video_ID_list.append ( item["contentDetails"]["videoId"] )
 
     # print(','.join(vid_ids))   #separate all values in a list with commas
     #------------------------------------------------------------------------#
@@ -61,6 +63,8 @@ while True:           #Loop through multiple pages of 50-values
     if not nextPageToken:
         break
 #---------------------------------------------------------------------------#
+yt_video_dict_list = {str(videoId):str(video_tittle) for videoId,video_tittle in zip(video_ID_list,video_title_list) }
+#---------------------------------------------------------------------------#
 # ```Test if files exist. If not create them.```
 
 if os.path.isfile('Video_Titles.txt'):
@@ -68,6 +72,13 @@ if os.path.isfile('Video_Titles.txt'):
 else:
     print ("Video_Titles.txt file does not exist!...creating the file")
     with open('Video_Titles.txt', 'w') as f:
+        pass
+
+if os.path.isfile('Video_Playlist_Data.p'):
+    print ("Video_Playlist_Data.p file exists.")
+else:
+    print ("Video_Playlist_Data.p file does not exist!...creating the file")
+    with open('Video_Playlist_Data.p', 'w') as f:
         pass
 
 if os.path.isfile('Video_Titles_Added.txt'):
@@ -85,25 +96,16 @@ else:
         pass
 #---------------------------------------------------------------------------#
 
-with open('Video_Titles.txt', encoding='utf8') as file:
-    saved_list   = file.read().splitlines()                   #Current local-save list of video titles
-    current_list = [ song for song in video_title_list ]      #Current youtube-bases list of video titles
+with open('Video_Playlist_Data.p', 'rb') as file:
+    try:
+        saved_video_dict_list = pickle.load(file)
+    except:
+        saved_video_dict_list = {}                 
 
-with open("Video_Titles.txt", "w", encoding="utf-8") as text_file:
-    for song in video_title_list:
-         text_file.write(str(song) + "\n")                    
-
-songs_added   = [ song for song in current_list if song not in saved_list]
-songs_removed = [ song for song in saved_list if song not in current_list]
-
-current_time  = datetime.datetime.now()
-
-if songs_removed:
-    with open("Video_Titles_Removed.txt", "a+", encoding="utf-8") as text_file:
-        text_file.write( f"Songs Removed on: {current_time} " + "\n\n")
-        for song in songs_removed:
-            text_file.write(str(song) + "\n")
-        text_file.write( "#-----------------------------------------------#\n\n")
+songs_ids_added   = [ song_id for song_id in yt_video_dict_list    if song_id not in saved_video_dict_list ]
+songs_ids_removed = [ song_id for song_id in saved_video_dict_list if song_id not in yt_video_dict_list    ]
+songs_added       = [ yt_video_dict_list.get   (song, "Error") for song in songs_ids_added ]
+songs_removed     = [ saved_video_dict_list.get(song, "Error") for song in songs_ids_removed ]
 
 if songs_added:
     with open("Video_Titles_Added.txt", "a+", encoding="utf-8") as text_file:
@@ -112,4 +114,25 @@ if songs_added:
             text_file.write(str(song) + "\n")
         text_file.write( "#-----------------------------------------------#\n\n")
 
-# print("Done")
+if songs_removed:
+    with open("Video_Titles_Removed.txt", "a+", encoding="utf-8") as text_file:
+        text_file.write( f"Songs Removed on: {current_time} " + "\n\n")
+        for song in songs_removed:
+            text_file.write(str(song) + "\n")
+        text_file.write( "#-----------------------------------------------#\n\n")
+
+#---------------------------------------------------------------------------#
+
+with open('Video_Playlist_Data.p', 'wb') as file:
+    pickle.dump(yt_video_dict_list, file, protocol=pickle.HIGHEST_PROTOCOL)
+
+with open("Video_Titles.txt", "w", encoding="utf-8") as text_file:
+    text_file.write( f"Playlist last checked on: {current_time} " + "\n\n")
+    for index, song in enumerate(list(yt_video_dict_list.values())):
+         text_file.write(str(index) + ": " + str(song) + "\n")   
+
+# if __name__ == "__main__":
+#     read_files()
+#     get_youtube_data()
+#     update_files()
+#     print("Done")

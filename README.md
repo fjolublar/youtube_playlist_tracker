@@ -1,4 +1,4 @@
-# youtube_playlist_tracker
+# Youtube Playlist Tracker
 
 Do you hate it when a video has been deleted from your music playlist in Youtube?
 And you can't seem to find the title of the video? 
